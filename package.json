@@ -1,0 +1,27 @@
+{
+  "name": "bitpipe",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node demo/unsigned/payload",
+    "start": "node index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bitcoind-rpc": "^0.7.2",
+    "datapay": "0.0.3",
+    "express": "^4.16.4",
+    "ip": "^1.1.5"
+  },
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "eslint": "^5.12.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0"
+  }
+}
