@@ -4,7 +4,7 @@
 
 ![pipe](pipe.png)
 
-Bitpipe is a transaction broadcast Microservice powered by [DataPay](https://github.com/unwriter/datapay), a declarative Bitcoin transaction builder and broadcaster library.
+Bitpipe is a transaction broadcast Microservice powered by [DataPay](https://github.com/unwriter/datapay), a declarative Bitcoin transaction builder and broadcaster library for **Bitcoin SV**.
 
 It sets up a web server that accepts a [Datapay Payload](https://github.com/unwriter/datapay#declarative-programming) that looks like  this:
 
