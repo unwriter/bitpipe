@@ -30,6 +30,7 @@ const PRIVATE_KEYS = KEYS.filter(function(p) {
 var app = null
 var current_index = 0
 
+var rpc
 var start = function(o) {
   var lambda = null
   var port = 8081
@@ -52,14 +53,19 @@ var start = function(o) {
   app.use(express.urlencoded({extended: true}));
   app.use(express.json())
   app.use(express.static('public'))
-  const rpc = new RpcClient({
-    'protocol': 'http',
-    'user': KEY_MAPPING.rpc_user ? KEY_MAPPING.rpc_user : 'root',
-    'pass': KEY_MAPPING.rpc_pass ? KEY_MAPPING.rpc_pass : 'bitcoin',
-    'host': KEY_MAPPING.host ? KEY_MAPPING.host : ip.address(),
-    'port': '8332',
-    'limit': 15
-  })
+  if (KEY_MAPPING.LOCAL) {
+    // rpc
+    rpc = new RpcClient({
+      'protocol': 'http',
+      'user': KEY_MAPPING.rpc_user ? KEY_MAPPING.rpc_user : 'root',
+      'pass': KEY_MAPPING.rpc_pass ? KEY_MAPPING.rpc_pass : 'bitcoin',
+      'host': KEY_MAPPING.host ? KEY_MAPPING.host : ip.address(),
+      'port': '8332',
+      'limit': 15
+    })
+  } else {
+    // use remote insight
+  }
   app.get('/', function (req, res) {
     res.send('Hello Bitpipe!\n\nMake a POST request to:' + req.protocol + "://" + req.headers.host + req.originalUrl + "/bitpipe with a datapay payload.\n\nMore at https://github.com/unwriter/datapay")
   })
@@ -99,18 +105,28 @@ var run = function(err, payload, res) {
       payload.pay = { key : current_key }
     }
     console.log('payload = ', payload)
-    datapay.build(payload, function(err, signed_tx) {
-      console.log("signed tx = ", signed_tx)
-      rpc.sendRawTransaction(signed_tx, function(err, r) {
+    if (KEY_MAPPING.LOCAL) {
+      datapay.build(payload, function(err, signed_tx) {
+        console.log("signed tx = ", signed_tx)
+        rpc.sendRawTransaction(signed_tx, function(err, r) {
+          if (err) {
+            console.log("error: ", err)
+            res.json({success: false, message: err.toString()})
+          } else {
+            console.log("success: ", r)
+            res.json({success: true})
+          }
+        })
+      })
+    } else {
+      datapay.send(payload, function(err, res) {
         if (err) {
-          console.log("error: ", err)
-          res.json({success: false, message: err.toString()})
+          console.log("Error:", err)
         } else {
-          console.log("success: ", r)
-          res.json({success: true})
+          console.log("result = ", res)
         }
       })
-    })
+    }
   }
 }
 if (require.main === module) {

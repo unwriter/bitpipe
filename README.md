@@ -209,7 +209,20 @@ Let's revisit the example mentioned earlier:
 This whole process resembles the unix pipeline system, and no security is breached along the way, thanks to Bitcoin.
 
 
+# Modes
 
+There are two modes:
+
+**1. Full Node:** Works with your OWN node, which means you need a Bitcoin node.
+**2. Light Node:** Works WITHOUT a Bitcoin node. Instead it uses a remote insight endpoint (Default: bchsvexplorer.com)
+
+By default Bitpipe runs as Light node.
+
+If you want to use your own Bitcoin node instead of a remote Insight API, you can add the following line to the `.env` file:
+
+```
+LOCAL=true
+```
 
 
 # Usage

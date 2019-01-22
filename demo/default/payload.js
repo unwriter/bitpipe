@@ -1,5 +1,5 @@
 var axios = require('axios')
-const host = "https://bitpipe.bitdb.network"
+const host = "https://pipe.bitdb.network"
 var datapay = require('datapay')
 axios.post(host + "/bitpipe", {
   data: [ "0x6d02", "hello from datapay" ]
