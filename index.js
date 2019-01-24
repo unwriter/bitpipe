@@ -92,7 +92,11 @@ var start = function(o) {
       run(null, payload, res)
     }
   })
-  app.listen(port, () => console.log(`bitpipe listening on port ${port}!`))
+  if (o && o.onconnect) {
+    app.listen(port, o.onconnect)
+  } else {
+    app.listen(port)
+  }
 }
 var run = function(err, payload, res) {
   let current_key = PRIVATE_KEYS[current_index]
@@ -104,26 +108,28 @@ var run = function(err, payload, res) {
     } else {
       payload.pay = { key : current_key }
     }
-    console.log('payload = ', payload)
+    if (KEY_MAPPING.DEBUG) console.log('payload = ', payload)
     if (KEY_MAPPING.LOCAL) {
       datapay.build(payload, function(err, signed_tx) {
-        console.log("signed tx = ", signed_tx)
+        if (KEY_MAPPING.DEBUG) console.log("signed tx = ", signed_tx)
         rpc.sendRawTransaction(signed_tx, function(err, r) {
           if (err) {
             console.log("error: ", err)
             res.json({success: false, message: err.toString()})
           } else {
-            console.log("success: ", r)
-            res.json({success: true})
+            if  (KEY_MAPPING.DEBUG) console.log("success: ", r)
+            res.json({success: true, r: r})
           }
         })
       })
     } else {
-      datapay.send(payload, function(err, res) {
-        if (err) {
-          console.log("Error:", err)
+      datapay.send(payload, function(e, r) {
+        if (e) {
+          console.log("error: ", e)
+          res.json({success: false, message: e.toString()})
         } else {
-          console.log("result = ", res)
+          if  (KEY_MAPPING.DEBUG) console.log("success: ", r)
+          res.json({success: true, r: r})
         }
       })
     }
