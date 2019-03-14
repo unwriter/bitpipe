@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bitcoind-rpc": "^0.7.2",
-    "datapay": "0.0.4",
+    "datapay": "0.0.12",
     "express": "^4.16.4",
     "ip": "^1.1.5"
   },
