@@ -4,7 +4,7 @@ const RpcClient = require('bitcoind-rpc')
 const fs = require('fs')
 const ip = require('ip')
 const keyfile = fs.readFileSync(process.cwd() + '/.env', 'utf8')
-const KEYS = keyfile.split("\n").filter(function(i) {
+const KEYS = keyfile.split(/[\n\r]+/).filter(function(i) {
   return i
 }).map(function(i) {
   let o = {}
